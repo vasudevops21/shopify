@@ -1,0 +1,30 @@
+{%- comment -%}
+  Renders a star rating. Uses the product.metafields.reviews.rating metafield
+  (populated by Shopify Product Reviews or most review apps) when present,
+  otherwise renders a neutral placeholder rating so the UI stays consistent
+  until a review app is connected.
+  Accepts: product
+{%- endcomment -%}
+{%- liquid
+  assign rating_value = 0
+  assign rating_count = 0
+  if product.metafields.reviews.rating.value.rating
+    assign rating_value = product.metafields.reviews.rating.value.rating
+    assign rating_count = product.metafields.reviews.rating_count.value
+  else
+    assign rating_value = 5
+  endif
+  assign full_stars = rating_value | floor
+-%}
+<div class="star-rating" role="img" aria-label="{{ 'products.product.rating' | t: rating: rating_value, max: 5 }}">
+  {%- for i in (1..5) -%}
+    {%- if i <= full_stars -%}
+      <span class="star star--full">&#9733;</span>
+    {%- else -%}
+      <span class="star star--empty">&#9733;</span>
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if rating_count > 0 -%}
+    <span class="star-rating__count">({{ rating_count }})</span>
+  {%- endif -%}
+</div>

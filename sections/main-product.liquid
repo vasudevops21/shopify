@@ -1,0 +1,202 @@
+{%- assign product = product -%}
+<section class="product-page page-width" data-section-id="{{ section.id }}">
+  <div class="product-page__grid">
+    <div class="product-page__gallery" data-product-gallery>
+      <div class="product-page__main-image">
+        {%- for media in product.media -%}
+          <div class="product-page__slide {% if forloop.first %}is-active{% endif %}" data-media-id="{{ media.id }}">
+            <img
+              srcset="{{ media | image_url: width: 500 }} 500w,
+                      {{ media | image_url: width: 800 }} 800w,
+                      {{ media | image_url: width: 1100 }} 1100w"
+              sizes="(min-width: 990px) 50vw, 100vw"
+              src="{{ media | image_url: width: 1100 }}"
+              alt="{{ media.alt | escape }}"
+              width="{{ media.width }}"
+              height="{{ media.height }}"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              class="product-page__image"
+            >
+          </div>
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'product-page__image product-page__placeholder' }}
+        {%- endfor -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="product-page__thumbnails">
+          {%- for media in product.media -%}
+            <button type="button" class="product-page__thumb {% if forloop.first %}is-active{% endif %}" data-thumb data-media-id="{{ media.id }}">
+              <img src="{{ media | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product-page__info">
+      <p class="product-page__set-label">{{ 'products.product.three_piece_set' | t }}</p>
+      <h1 class="product-page__title">{{ product.title }}</h1>
+      {% render 'star-rating', product: product %}
+
+      <div class="product-page__price" data-product-price>
+        {% render 'price', product: product %}
+      </div>
+
+      {% render 'whats-included', product: product %}
+
+      {%- form 'product', product, id: 'ProductForm', class: 'product-page__form' -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-product-variant-id>
+
+        {% render 'variant-picker', product: product, product_form_id: 'ProductForm' %}
+
+        <div class="product-page__quantity-row">
+          <span class="product-page__quantity-label">{{ 'products.product.quantity' | t }}</span>
+          {% render 'quantity-input', qty: 1, name: 'quantity', min: 1 %}
+        </div>
+
+        <div class="product-page__actions">
+          <button
+            type="submit"
+            name="add"
+            class="button button--primary product-page__add-to-cart"
+            {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+            data-add-to-cart
+          >
+            <span data-add-to-cart-text>
+              {%- if product.selected_or_first_available_variant.available -%}
+                {{ 'products.product.add_to_cart' | t }}
+              {%- else -%}
+                {{ 'products.product.sold_out' | t }}
+              {%- endif -%}
+            </span>
+          </button>
+          <button type="button" class="product-page__wishlist" data-wishlist-toggle data-product-id="{{ product.id }}" aria-pressed="false" aria-label="{{ 'products.product.add_to_wishlist' | t }}">
+            {% render 'icon-wishlist' %}
+          </button>
+        </div>
+
+        {%- if product.selected_or_first_available_variant.available -%}
+          <button type="submit" name="checkout" class="button button--outline product-page__buy-now">
+            {{ 'products.product.buy_now' | t }}
+          </button>
+        {%- endif -%}
+      {%- endform -%}
+
+      <div class="product-page__accordion">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'details' -%}
+              {% render 'collapsible-row', title: block.settings.title, content: block.settings.content, open: true %}
+            {%- when 'fabric' -%}
+              {% render 'collapsible-row', title: block.settings.title, content: product.metafields.custom.fabric.value %}
+            {%- when 'fit' -%}
+              {% render 'collapsible-row', title: block.settings.title, content: product.metafields.custom.fit.value %}
+            {%- when 'pattern' -%}
+              {% render 'collapsible-row', title: block.settings.title, content: product.metafields.custom.pattern.value %}
+            {%- when 'occasion' -%}
+              {% render 'collapsible-row', title: block.settings.title, content: product.metafields.custom.occasion.value %}
+            {%- when 'care' -%}
+              {%- assign care_content = product.metafields.custom.care_instructions.value | default: block.settings.content -%}
+              {% render 'collapsible-row', title: block.settings.title, content: care_content %}
+            {%- when 'shipping' -%}
+              {% render 'collapsible-row', title: block.settings.title, content: block.settings.content %}
+            {%- when 'returns' -%}
+              {% render 'collapsible-row', title: block.settings.title, content: block.settings.content %}
+            {%- when 'size_guide' -%}
+              {% render 'collapsible-row', title: block.settings.title, content: block.settings.content %}
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="size-guide-modal" data-size-guide-modal hidden>
+  <div class="size-guide-modal__overlay" data-close-size-guide></div>
+  <div class="size-guide-modal__panel">
+    <div class="size-guide-modal__header">
+      <h3>{{ 'products.product.size_guide' | t }}</h3>
+      <button type="button" data-close-size-guide aria-label="{{ 'accessibility.close' | t }}">{% render 'icon-close' %}</button>
+    </div>
+    <div class="size-guide-modal__body rte">
+      {{ section.settings.size_chart }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product information",
+  "blocks": [
+    {
+      "type": "details",
+      "name": "Product details",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Product Details" },
+        { "type": "richtext", "id": "content", "label": "Content" }
+      ]
+    },
+    { "type": "fabric", "name": "Fabric", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title", "default": "Fabric" } ] },
+    { "type": "fit", "name": "Fit", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title", "default": "Fit" } ] },
+    { "type": "pattern", "name": "Pattern", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title", "default": "Pattern" } ] },
+    { "type": "occasion", "name": "Occasion", "limit": 1, "settings": [ { "type": "text", "id": "title", "label": "Title", "default": "Occasion" } ] },
+    {
+      "type": "care",
+      "name": "Care instructions",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Care Instructions" },
+        { "type": "richtext", "id": "content", "label": "Default content", "default": "<p>Gentle machine wash separately in cold water. Do not bleach. Iron on low heat.</p>" }
+      ]
+    },
+    {
+      "type": "shipping",
+      "name": "Shipping",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Shipping" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Free shipping on orders above ₹999. Orders are dispatched within 1-2 business days.</p>" }
+      ]
+    },
+    {
+      "type": "returns",
+      "name": "Returns & Replacement",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Returns & Replacement" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>10 days easy return / replacement from date of delivery.</p>" }
+      ]
+    },
+    {
+      "type": "size_guide",
+      "name": "Size guide (accordion)",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Size Guide" },
+        { "type": "richtext", "id": "content", "label": "Content" }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "size_chart",
+      "label": "Size chart (shown in size guide popup)",
+      "default": "<p><strong>XS:</strong> Bust 34in / Waist 28in</p><p><strong>S:</strong> Bust 36in / Waist 30in</p><p><strong>M:</strong> Bust 38in / Waist 32in</p><p><strong>L:</strong> Bust 40in / Waist 34in</p><p><strong>XL:</strong> Bust 42in / Waist 36in</p><p><strong>XXL:</strong> Bust 44in / Waist 38in</p>"
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "details" },
+      { "type": "fabric" },
+      { "type": "fit" },
+      { "type": "pattern" },
+      { "type": "occasion" },
+      { "type": "care" },
+      { "type": "shipping" },
+      { "type": "returns" }
+    ]
+  }
+}
+{% endschema %}

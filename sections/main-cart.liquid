@@ -1,0 +1,53 @@
+<section class="cart-page page-width">
+  <h1 class="cart-page__title">{{ 'templates.cart.title' | t }}</h1>
+
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-page__form" data-cart-form>
+      <div class="cart-page__layout">
+        <div class="cart-page__items">
+          {%- for item in cart.items -%}
+            {% render 'cart-item', item: item, item_index: forloop.index %}
+          {%- endfor -%}
+        </div>
+
+        <div class="cart-page__summary">
+          <p class="cart-page__free-shipping">
+            {%- assign remaining = settings.free_shipping_threshold | times: 100 | minus: cart.total_price -%}
+            {%- if remaining > 0 -%}
+              {{ 'cart.general.free_shipping_remaining' | t: amount: remaining | money }}
+            {%- else -%}
+              {{ 'cart.general.free_shipping_unlocked' | t }}
+            {%- endif -%}
+          </p>
+          <div class="cart-page__row">
+            <span>{{ 'cart.general.subtotal' | t }}</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+          <div class="cart-page__row">
+            <span>{{ 'cart.general.shipping' | t }}</span>
+            <span>{{ 'cart.general.calculated_at_checkout' | t }}</span>
+          </div>
+          <div class="cart-page__row cart-page__row--total">
+            <span>{{ 'cart.general.total' | t }}</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+          <p class="cart-page__shipping-note">{{ 'cart.general.shipping_taxes_note' | t }}</p>
+          <button type="submit" name="checkout" class="button button--primary cart-page__checkout">{{ 'cart.general.checkout' | t }}</button>
+          <a href="{{ routes.all_products_collection_url }}" class="cart-page__continue">{{ 'cart.general.continue_shopping' | t }}</a>
+        </div>
+      </div>
+    </form>
+  {%- else -%}
+    <div class="cart-page__empty">
+      <p>{{ 'cart.general.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button button--primary">{{ 'cart.general.continue_shopping' | t }}</a>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "settings": []
+}
+{% endschema %}

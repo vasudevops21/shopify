@@ -1,0 +1,24 @@
+<section class="blog-page page-width">
+  <h1 class="blog-page__title">{{ blog.title }}</h1>
+  <div class="blog-page__grid">
+    {%- paginate blog.articles by 9 -%}
+      {%- for article in blog.articles -%}
+        <a href="{{ article.url }}" class="blog-page__card">
+          {%- if article.image -%}
+            <img src="{{ article.image | image_url: width: 600 }}" alt="{{ article.image.alt | escape }}" width="{{ article.image.width }}" height="{{ article.image.height }}" loading="lazy" class="blog-page__image">
+          {%- endif -%}
+          <h2 class="blog-page__card-title">{{ article.title }}</h2>
+          <p class="blog-page__card-excerpt">{{ article.excerpt_or_content | strip_html | truncate: 120 }}</p>
+        </a>
+      {%- endfor -%}
+      {% render 'pagination', paginate: paginate %}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,33 @@
+{%- comment -%}
+  Renders MRP + selling price + discount % using Shopify native price / compare_at_price.
+  Accepts:
+    product: a product object (required)
+    variant: optional variant object; defaults to product.selected_or_first_available_variant
+    show_badge: optional boolean, renders the discount badge (default true)
+{%- endcomment -%}
+{%- liquid
+  assign target = variant | default: product.selected_or_first_available_variant
+  assign price = target.price | default: product.price_min
+  assign compare_at_price = target.compare_at_price | default: product.compare_at_price_min
+  assign show_badge = show_badge | default: true
+  assign on_sale = false
+  if compare_at_price > price
+    assign on_sale = true
+    assign discount_amount = compare_at_price | minus: price
+    assign discount_percent = discount_amount | times: 100.0 | divided_by: compare_at_price | round
+  endif
+-%}
+<div class="price {% if on_sale %}price--on-sale{% endif %}">
+  {%- if on_sale -%}
+    <span class="price__mrp" aria-hidden="true">
+      <s class="price__compare-at">{{ compare_at_price | money }}</s>
+    </span>
+    <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+    <span class="price__sale">{{ price | money }}</span>
+    {%- if show_badge and discount_percent > 0 -%}
+      <span class="price__discount-badge">{{ 'products.product.price.discount_off' | t: percent: discount_percent }}</span>
+    {%- endif -%}
+  {%- else -%}
+    <span class="price__sale price__sale--only">{{ price | money }}</span>
+  {%- endif -%}
+</div>

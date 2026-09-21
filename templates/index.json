@@ -1,0 +1,74 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Elegance in Every Layer.",
+        "subtext": "Discover beautifully coordinated 3-piece Kurti Sets designed for effortless everyday elegance.",
+        "primary_label": "SHOP 3-PIECE SETS",
+        "secondary_label": "NEW ARRIVALS",
+        "text_position": "left",
+        "overlay_opacity": 15
+      }
+    },
+    "trust": {
+      "type": "trust-benefits"
+    },
+    "new-arrivals": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "New Arrivals",
+        "subheading": "Fresh 3-piece sets, just landed",
+        "products_to_show": 8,
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "show_view_all": true
+      }
+    },
+    "shop-style": {
+      "type": "shop-by-style"
+    },
+    "best-sellers": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Best Sellers",
+        "subheading": "Loved by our customers",
+        "products_to_show": 4,
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "show_view_all": true
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Festive Edit",
+        "subheading": "Celebration-ready 3-piece sets",
+        "products_to_show": 4,
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "show_view_all": true
+      }
+    },
+    "why-us": {
+      "type": "why-choose-us"
+    },
+    "reviews": {
+      "type": "testimonials"
+    },
+    "instagram": {
+      "type": "instagram-social"
+    }
+  },
+  "order": [
+    "hero",
+    "trust",
+    "new-arrivals",
+    "shop-style",
+    "best-sellers",
+    "featured-collection",
+    "why-us",
+    "reviews",
+    "instagram"
+  ]
+}

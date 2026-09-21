@@ -1,0 +1,13 @@
+<section class="wishlist-page page-width">
+  <h1 class="wishlist-page__title">{{ 'general.wishlist.title' | t }}</h1>
+  <p class="wishlist-page__subtext">{{ 'general.wishlist.subtext' | t }}</p>
+  <div class="wishlist-page__grid" data-wishlist-grid></div>
+  <p class="wishlist-page__empty" data-wishlist-empty hidden>{{ 'general.wishlist.empty' | t }}</p>
+</section>
+
+{% schema %}
+{
+  "name": "Wishlist page",
+  "settings": []
+}
+{% endschema %}

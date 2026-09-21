@@ -1,0 +1,53 @@
+<section class="search-page page-width">
+  <div class="search-page__header">
+    {%- form 'search', role: 'search' -%}
+      <input type="hidden" name="type" value="product,article,page">
+      <div class="search-page__field-row">
+        {% render 'icon-search' %}
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" class="search-page__input">
+        <button type="submit" class="button button--primary">{{ 'general.search.submit' | t }}</button>
+      </div>
+    {%- endform -%}
+    {%- if search.performed -%}
+      <p class="search-page__count">{{ 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if search.performed -%}
+    {%- if search.results_count > 0 -%}
+      <div class="collection-page__layout">
+        <aside class="collection-page__sidebar">
+          {% render 'facets', results: search, results_url: search.url %}
+        </aside>
+        <div class="collection-page__main">
+          {%- paginate search.results by 16 -%}
+            <div class="product-grid product-grid--4-col product-grid--mobile-2-col">
+              {%- for item in search.results -%}
+                {%- if item.object_type == 'product' -%}
+                  {% render 'product-card', product: item %}
+                {%- else -%}
+                  <a href="{{ item.url }}" class="search-page__other-result">
+                    <p class="search-page__other-title">{{ item.title }}</p>
+                    <p class="search-page__other-excerpt">{{ item.content | strip_html | truncate: 100 }}</p>
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            {% render 'pagination', paginate: paginate %}
+          {%- endpaginate -%}
+        </div>
+      </div>
+    {%- else -%}
+      <div class="search-page__empty">
+        <p>{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Search results",
+  "settings": []
+}
+{% endschema %}

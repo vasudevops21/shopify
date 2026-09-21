@@ -1,0 +1,12 @@
+{%- comment -%}
+  Accepts: title, content (HTML string), open (boolean, optional)
+{%- endcomment -%}
+{%- if content != blank -%}
+<details class="collapsible-row" {% if open %}open{% endif %}>
+  <summary class="collapsible-row__summary">
+    <span>{{ title }}</span>
+    {% render 'icon-chevron' %}
+  </summary>
+  <div class="collapsible-row__content rte">{{ content }}</div>
+</details>
+{%- endif -%}

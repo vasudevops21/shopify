@@ -1,0 +1,122 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Vasthi Couture",
+    "theme_version": "1.0.0",
+    "theme_author": "Vasthi Couture",
+    "theme_documentation_url": "https://vasthicouture.com",
+    "theme_support_url": "https://vasthicouture.com/pages/contact"
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "header", "content": "Base palette" },
+      { "type": "color", "id": "color_background", "label": "Background", "default": "#FFFFFF" },
+      { "type": "color", "id": "color_cream", "label": "Cream", "default": "#FAF7F2" },
+      { "type": "color", "id": "color_ivory", "label": "Ivory", "default": "#FFFDF8" },
+      { "type": "color", "id": "color_beige", "label": "Beige", "default": "#EDE4D3" },
+      { "type": "color", "id": "color_text", "label": "Body text", "default": "#2B2B2B" },
+      { "type": "color", "id": "color_heading", "label": "Heading text", "default": "#1A1A1A" },
+      { "type": "color", "id": "color_border", "label": "Borders", "default": "#E5DFD3" },
+      { "type": "header", "content": "Accent & CTAs" },
+      { "type": "color", "id": "color_accent", "label": "Champagne gold accent", "default": "#C9A66B" },
+      { "type": "color", "id": "color_accent_dark", "label": "Accent (dark / hover)", "default": "#A9834E" },
+      { "type": "color", "id": "color_button_background", "label": "Button background", "default": "#1A1A1A" },
+      { "type": "color", "id": "color_button_text", "label": "Button text", "default": "#FFFFFF" },
+      { "type": "header", "content": "Pricing" },
+      { "type": "color", "id": "color_mrp", "label": "MRP / strikethrough price", "default": "#8A8A8A" },
+      { "type": "color", "id": "color_sale_badge", "label": "Discount badge accent", "default": "#B5654A" }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "label": "Heading font",
+        "default": "playfair_display_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "assistant_n4"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Page width",
+        "min": 1000,
+        "max": 1600,
+        "step": 20,
+        "default": 1280,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold (in ₹)",
+        "default": 999
+      },
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart behaviour",
+        "options": [
+          { "value": "drawer", "label": "Drawer" },
+          { "value": "page", "label": "Page" }
+        ],
+        "default": "drawer"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      { "type": "url", "id": "social_instagram_link", "label": "Instagram" },
+      { "type": "url", "id": "social_facebook_link", "label": "Facebook" },
+      { "type": "url", "id": "social_youtube_link", "label": "YouTube" }
+    ]
+  },
+  {
+    "name": "Currency format",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "All prices are shown in the store's default currency (INR / ₹) using Shopify's native money formatting. Configure the store currency in Settings > General in your Shopify admin."
+      },
+      {
+        "type": "checkbox",
+        "id": "currency_code_enabled",
+        "label": "Show currency codes",
+        "default": false
+      }
+    ]
+  }
+]

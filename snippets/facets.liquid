@@ -1,0 +1,93 @@
+{%- comment -%}
+  Native Shopify filtering + sorting for a collection/search results object.
+  Accepts: results (collection or search object), results_url
+{%- endcomment -%}
+<facet-filters class="facets" data-facets>
+  <form id="FacetFiltersForm" action="{{ results_url }}">
+    <input type="hidden" name="sort_by" value="{{ results.sort_by }}">
+
+    <div class="facets__sort">
+      <label for="SortBy" class="facets__sort-label">{{ 'collections.sorting.title' | t }}</label>
+      <select name="sort_by" id="SortBy" class="facets__sort-select" data-sort-select>
+        {%- for option in results.sort_options -%}
+          <option value="{{ option.value }}" {% if option.value == results.sort_by %}selected{% endif %}>{{ option.name }}</option>
+        {%- endfor -%}
+      </select>
+    </div>
+
+    <button type="button" class="facets__mobile-trigger" data-open-filters>
+      {{ 'collections.filtering.filter_and_sort' | t }}
+    </button>
+
+    <div class="facets__filters" data-filters-panel>
+      <div class="facets__filters-header">
+        <p class="facets__filters-title">{{ 'collections.filtering.filter_by' | t }}</p>
+        <button type="button" class="facets__close" data-close-filters aria-label="{{ 'accessibility.close' | t }}">
+          {% render 'icon-close' %}
+        </button>
+      </div>
+
+      {%- for filter in results.filters -%}
+        <details class="facets__group" open>
+          <summary class="facets__group-title">
+            {{ filter.label }}
+            {% render 'icon-chevron' %}
+          </summary>
+          <div class="facets__group-body">
+            {%- case filter.type -%}
+              {%- when 'list' -%}
+                {%- for value in filter.values -%}
+                  <label class="facets__checkbox-label {% if value.count == 0 and value.active == false %}facets__checkbox-label--disabled{% endif %}">
+                    <input
+                      type="checkbox"
+                      name="{{ value.param_name }}"
+                      value="{{ value.value }}"
+                      {% if value.active %}checked{% endif %}
+                      {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                      data-facet-checkbox
+                    >
+                    <span>{{ value.label }}</span>
+                    <span class="facets__count">({{ value.count }})</span>
+                  </label>
+                {%- endfor -%}
+              {%- when 'price_range' -%}
+                <div class="facets__price-range">
+                  <label>
+                    {{ 'collections.filtering.from' | t }}
+                    <input type="number" name="{{ filter.min_value.param_name }}" placeholder="{{ filter.range_min | money_without_currency }}" value="{{ filter.min_value.value }}">
+                  </label>
+                  <label>
+                    {{ 'collections.filtering.to' | t }}
+                    <input type="number" name="{{ filter.max_value.param_name }}" placeholder="{{ filter.range_max | money_without_currency }}" value="{{ filter.max_value.value }}">
+                  </label>
+                </div>
+              {%- when 'boolean' -%}
+                {%- for value in filter.values -%}
+                  <label class="facets__checkbox-label">
+                    <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} data-facet-checkbox>
+                    <span>{{ value.label }}</span>
+                    <span class="facets__count">({{ value.count }})</span>
+                  </label>
+                {%- endfor -%}
+            {%- endcase -%}
+          </div>
+        </details>
+      {%- endfor -%}
+
+      <div class="facets__actions">
+        <a href="{{ results_url }}" class="facets__clear">{{ 'collections.filtering.clear_all' | t }}</a>
+        <button type="submit" class="button button--primary facets__apply">{{ 'collections.filtering.apply' | t }}</button>
+      </div>
+    </div>
+  </form>
+</facet-filters>
+{%- if results.active_filters.size > 0 -%}
+  <div class="facets__active">
+    {%- for filter in results.active_filters -%}
+      <a href="{{ filter.url_to_remove }}" class="facets__active-pill">
+        {{ filter.label }} {% render 'icon-close' %}
+      </a>
+    {%- endfor -%}
+    <a href="{{ results_url }}" class="facets__active-clear">{{ 'collections.filtering.clear_all' | t }}</a>
+  </div>
+{%- endif -%}
