@@ -1,0 +1,28 @@
+<section class="account-page page-width account-page--narrow">
+  <h1 class="account-page__title">{{ 'customer.register.title' | t }}</h1>
+  {%- form 'create_customer' -%}
+    {%- if form.errors -%}
+      <p class="account-page__error">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+    <div class="account-page__field">
+      <label for="RegisterFirstName">{{ 'customer.register.first_name' | t }}</label>
+      <input type="text" name="customer[first_name]" id="RegisterFirstName" autocomplete="given-name">
+    </div>
+    <div class="account-page__field">
+      <label for="RegisterLastName">{{ 'customer.register.last_name' | t }}</label>
+      <input type="text" name="customer[last_name]" id="RegisterLastName" autocomplete="family-name">
+    </div>
+    <div class="account-page__field">
+      <label for="RegisterEmail">{{ 'customer.register.email' | t }}</label>
+      <input type="email" name="customer[email]" id="RegisterEmail" autocomplete="email" required>
+    </div>
+    <div class="account-page__field">
+      <label for="RegisterPassword">{{ 'customer.register.password' | t }}</label>
+      <input type="password" name="customer[password]" id="RegisterPassword" autocomplete="new-password" required>
+    </div>
+    <button type="submit" class="button button--primary">{{ 'customer.register.submit' | t }}</button>
+    <div class="account-page__links">
+      <a href="{{ routes.account_login_url }}">{{ 'customer.register.already_account' | t }}</a>
+    </div>
+  {%- endform -%}
+</section>

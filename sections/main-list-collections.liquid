@@ -1,0 +1,24 @@
+<section class="collection-list-page page-width">
+  <h1 class="collection-list-page__title">{{ 'collections.general.title' | t }}</h1>
+  <div class="shop-by-style__grid">
+    {%- for collection in collections -%}
+      {%- unless collection.handle == 'frontpage' -%}
+        <a href="{{ collection.url }}" class="shop-by-style__card">
+          {%- if collection.featured_image -%}
+            <img src="{{ collection.featured_image | image_url: width: 800 }}" alt="{{ collection.title | escape }}" width="{{ collection.featured_image.width }}" height="{{ collection.featured_image.height }}" loading="lazy" class="shop-by-style__image">
+          {%- else -%}
+            {{ 'collection-1' | placeholder_svg_tag: 'shop-by-style__image shop-by-style__placeholder' }}
+          {%- endif -%}
+          <span class="shop-by-style__title">{{ collection.title }}</span>
+        </a>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,53 @@
+<section class="testimonials page-width">
+  <div class="section-heading section-heading--center">
+    {%- if section.settings.heading != blank -%}<h2 class="section-heading__title">{{ section.settings.heading }}</h2>{%- endif -%}
+  </div>
+  <div class="testimonials__grid">
+    {%- for block in section.blocks -%}
+      <div class="testimonial-card" {{ block.shopify_attributes }}>
+        <div class="star-rating" role="img" aria-label="{{ block.settings.rating }} out of 5 stars">
+          {%- for i in (1..5) -%}
+            {%- if i <= block.settings.rating -%}
+              <span class="star star--full">&#9733;</span>
+            {%- else -%}
+              <span class="star star--empty">&#9733;</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        <p class="testimonial-card__quote">&ldquo;{{ block.settings.quote }}&rdquo;</p>
+        <p class="testimonial-card__author">{{ block.settings.author }}</p>
+      </div>
+    {%- endfor -%}
+  </div>
+  <p class="testimonials__note">{{ 'sections.testimonials.connect_app_note' | t }}</p>
+</section>
+
+{% schema %}
+{
+  "name": "Customer reviews",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What Our Customers Say" }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "Absolutely loved the quality and fit! The dupatta and bottom matched perfectly." },
+        { "type": "text", "id": "author", "label": "Author", "default": "Priya S." }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "review", "settings": { "rating": 5, "quote": "Absolutely loved the quality and fit! The dupatta and bottom matched perfectly.", "author": "Priya S." } },
+      { "type": "review", "settings": { "rating": 5, "quote": "Premium fabric and gorgeous prints. My go-to for festive wear now.", "author": "Ananya R." } },
+      { "type": "review", "settings": { "rating": 4, "quote": "Fast delivery and the set looks even better in person.", "author": "Meera K." } }
+    ]
+  },
+  "presets": [
+    { "name": "Customer reviews" }
+  ]
+}
+{% endschema %}

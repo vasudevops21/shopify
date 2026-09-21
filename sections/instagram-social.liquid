@@ -1,0 +1,50 @@
+<section class="instagram-social page-width">
+  <div class="section-heading section-heading--center">
+    {%- if section.settings.heading != blank -%}<h2 class="section-heading__title">{{ section.settings.heading }}</h2>{%- endif -%}
+    {%- if section.settings.handle != blank -%}
+      <a href="https://instagram.com/{{ section.settings.handle }}" class="instagram-social__handle" target="_blank" rel="noopener">@{{ section.settings.handle }}</a>
+    {%- endif -%}
+  </div>
+  <div class="instagram-social__grid">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link | default: '#' }}" class="instagram-social__item" target="_blank" rel="noopener" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <img src="{{ block.settings.image | image_url: width: 500 }}" alt="" width="500" height="500" loading="lazy" class="instagram-social__image">
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'instagram-social__image instagram-social__placeholder' }}
+        {%- endif -%}
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Instagram / Social",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Follow Us" },
+    { "type": "text", "id": "handle", "label": "Instagram handle", "default": "vasthicouture" }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "image", "settings": {} },
+      { "type": "image", "settings": {} },
+      { "type": "image", "settings": {} },
+      { "type": "image", "settings": {} }
+    ]
+  },
+  "presets": [
+    { "name": "Instagram / Social" }
+  ]
+}
+{% endschema %}

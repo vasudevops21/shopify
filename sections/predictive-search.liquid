@@ -1,0 +1,26 @@
+<div class="predictive-search" data-predictive-search>
+  <div class="predictive-search__overlay" data-close-search></div>
+  <div class="predictive-search__panel">
+    <div class="predictive-search__field-row page-width">
+      {% render 'icon-search' %}
+      <input
+        type="search"
+        name="q"
+        class="predictive-search__input"
+        placeholder="{{ 'general.search.placeholder' | t }}"
+        autocomplete="off"
+        data-predictive-search-input
+        aria-label="{{ 'general.search.title' | t }}"
+      >
+      <button type="button" data-close-search aria-label="{{ 'accessibility.close' | t }}">{% render 'icon-close' %}</button>
+    </div>
+    <div class="predictive-search__results page-width" data-predictive-search-results></div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Predictive search",
+  "settings": []
+}
+{% endschema %}

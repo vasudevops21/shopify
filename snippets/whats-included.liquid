@@ -1,0 +1,19 @@
+{%- comment -%}
+  Highly visible 3-piece set breakdown. Editable per-product via metafields
+  (namespace: custom, keys: included_1 / included_2 / included_3) with sensible
+  defaults so it works immediately without any metafield setup.
+  Accepts: product
+{%- endcomment -%}
+{%- liquid
+  assign item_1 = product.metafields.custom.included_1 | default: "Kurti"
+  assign item_2 = product.metafields.custom.included_2 | default: "Bottom"
+  assign item_3 = product.metafields.custom.included_3 | default: "Dupatta"
+-%}
+<div class="whats-included">
+  <h3 class="whats-included__heading">{{ 'products.product.whats_included' | t }}</h3>
+  <ul class="whats-included__list">
+    <li class="whats-included__item"><span class="whats-included__check" aria-hidden="true">&#10003;</span>{{ item_1 }}</li>
+    <li class="whats-included__item"><span class="whats-included__check" aria-hidden="true">&#10003;</span>{{ item_2 }}</li>
+    <li class="whats-included__item"><span class="whats-included__check" aria-hidden="true">&#10003;</span>{{ item_3 }}</li>
+  </ul>
+</div>

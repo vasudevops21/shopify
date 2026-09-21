@@ -1,0 +1,51 @@
+<cart-drawer class="cart-drawer" data-cart-drawer hidden>
+  <div class="cart-drawer__overlay" data-close-cart></div>
+  <div class="cart-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'templates.cart.title' | t }}">
+    <div class="cart-drawer__header">
+      <h2>{{ 'templates.cart.title' | t }} ({{ cart.item_count }})</h2>
+      <button type="button" data-close-cart aria-label="{{ 'accessibility.close' | t }}">{% render 'icon-close' %}</button>
+    </div>
+
+    <div class="cart-drawer__body" data-cart-drawer-body>
+      {%- if cart.item_count > 0 -%}
+        <div class="cart-drawer__items">
+          {%- for item in cart.items -%}
+            {% render 'cart-item', item: item, item_index: forloop.index %}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="cart-drawer__empty">
+          <p>{{ 'cart.general.empty' | t }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="button button--primary">{{ 'cart.general.continue_shopping' | t }}</a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if cart.item_count > 0 -%}
+      <div class="cart-drawer__footer">
+        <p class="cart-drawer__free-shipping">
+          {%- assign remaining = settings.free_shipping_threshold | times: 100 | minus: cart.total_price -%}
+          {%- if remaining > 0 -%}
+            {{ 'cart.general.free_shipping_remaining' | t: amount: remaining | money }}
+          {%- else -%}
+            {{ 'cart.general.free_shipping_unlocked' | t }}
+          {%- endif -%}
+        </p>
+        <div class="cart-drawer__subtotal-row">
+          <span>{{ 'cart.general.subtotal' | t }}</span>
+          <span data-cart-subtotal>{{ cart.total_price | money }}</span>
+        </div>
+        <p class="cart-drawer__shipping-note">{{ 'cart.general.shipping_taxes_note' | t }}</p>
+        <a href="{{ routes.cart_url }}" class="button button--outline cart-drawer__view-cart">{{ 'cart.general.view_cart' | t }}</a>
+        <a href="{{ routes.cart_url }}/checkout" class="button button--primary cart-drawer__checkout">{{ 'cart.general.checkout' | t }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": []
+}
+{% endschema %}

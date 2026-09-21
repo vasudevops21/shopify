@@ -1,0 +1,45 @@
+<section class="collection-page page-width">
+  <div class="collection-page__header">
+    <h1 class="collection-page__title">{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="collection-page__description rte">{{ collection.description }}</div>
+    {%- endif -%}
+    <p class="collection-page__count">{{ 'collections.general.item_count' | t: count: collection.products_count }}</p>
+  </div>
+
+  <div class="collection-page__layout">
+    <aside class="collection-page__sidebar">
+      {% render 'facets', results: collection, results_url: collection.url %}
+    </aside>
+
+    <div class="collection-page__main">
+      {%- paginate collection.products by section.settings.products_per_page -%}
+        {%- if collection.products.size > 0 -%}
+          <div class="product-grid product-grid--{{ section.settings.columns_desktop }}-col product-grid--mobile-2-col" data-product-grid>
+            {%- for product in collection.products -%}
+              {% render 'product-card', product: product %}
+            {%- endfor -%}
+          </div>
+          {% render 'pagination', paginate: paginate %}
+        {%- else -%}
+          <div class="collection-page__empty">
+            <p>{{ 'collections.general.no_matches' | t }}</p>
+            <a href="{{ collection.url }}" class="button button--outline">{{ 'collections.filtering.clear_all' | t }}</a>
+          </div>
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection pages",
+  "settings": [
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 16 },
+    { "type": "select", "id": "columns_desktop", "label": "Desktop columns", "options": [
+        { "value": "3", "label": "3" }, { "value": "4", "label": "4" }
+      ], "default": "4" }
+  ]
+}
+{% endschema %}

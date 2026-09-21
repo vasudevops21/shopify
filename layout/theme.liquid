@@ -1,0 +1,87 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}" dir="{{ settings.text_direction | default: 'ltr' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="{{ settings.color_background }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {% if settings.favicon != blank %}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {% endif %}
+
+  {%- unless page_title contains shop.name -%}
+    <title>{{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+  {%- else -%}
+    <title>{{ page_title }}</title>
+  {%- endunless -%}
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  {{ content_for_header }}
+
+  <script>
+    window.theme = window.theme || {};
+    window.theme.moneyFormat = {{ shop.money_format | json }};
+    window.theme.routes = {
+      cartUrl: {{ routes.cart_url | json }},
+      cartAddUrl: {{ routes.cart_add_url | json }}
+    };
+  </script>
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+  {%- if settings.type_header_font.system? == false -%}
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+  {%- endif -%}
+
+  <style>
+    :root {
+      --color-background: {{ settings.color_background }};
+      --color-cream: {{ settings.color_cream }};
+      --color-ivory: {{ settings.color_ivory }};
+      --color-beige: {{ settings.color_beige }};
+      --color-text: {{ settings.color_text }};
+      --color-heading: {{ settings.color_heading }};
+      --color-accent: {{ settings.color_accent }};
+      --color-accent-dark: {{ settings.color_accent_dark }};
+      --color-sale: {{ settings.color_sale_badge }};
+      --color-mrp: {{ settings.color_mrp }};
+      --color-border: {{ settings.color_border }};
+      --color-button-bg: {{ settings.color_button_background }};
+      --color-button-text: {{ settings.color_button_text }};
+      --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
+      --font-heading-style: {{ settings.type_header_font.style }};
+      --font-heading-weight: {{ settings.type_header_font.weight }};
+      --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+      --font-body-style: {{ settings.type_body_font.style }};
+      --font-body-weight: {{ settings.type_body_font.weight }};
+      --page-width: {{ settings.page_width }}px;
+    }
+  </style>
+  {{ settings.type_header_font | font_face: font_display: 'swap' }}
+  {{ settings.type_body_font | font_face: font_display: 'swap' }}
+</head>
+<body class="template-{{ request.page_type | handleize }}">
+  <a class="skip-to-content-link visually-hidden" href="#MainContent">{{ 'accessibility.skip_to_text' | t }}</a>
+
+  {% sections 'header-group' %}
+
+  <main id="MainContent" class="content-for-layout" role="main">
+    {{ content_for_layout }}
+  </main>
+
+  {% sections 'footer-group' %}
+
+  {% section 'cart-drawer' %}
+
+  <div id="quick-search-drawer" class="search-drawer" hidden>
+    {% section 'predictive-search' %}
+  </div>
+</body>
+</html>

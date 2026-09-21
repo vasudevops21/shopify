@@ -1,0 +1,58 @@
+<section class="shop-by-style page-width">
+  <div class="section-heading section-heading--center">
+    {%- if section.settings.heading != blank -%}<h2 class="section-heading__title">{{ section.settings.heading }}</h2>{%- endif -%}
+    {%- if section.settings.subheading != blank -%}<p class="section-heading__subtitle">{{ section.settings.subheading }}</p>{%- endif -%}
+  </div>
+
+  <div class="shop-by-style__grid">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link }}" class="shop-by-style__card" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <img
+            src="{{ block.settings.image | image_url: width: 800 }}"
+            alt="{{ block.settings.title | escape }}"
+            width="{{ block.settings.image.width }}"
+            height="{{ block.settings.image.height }}"
+            loading="lazy"
+            class="shop-by-style__image"
+          >
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'shop-by-style__image shop-by-style__placeholder' }}
+        {%- endif -%}
+        <span class="shop-by-style__title">{{ block.settings.title }}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Shop by style",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by Style" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Curated 3-piece sets for every occasion" }
+  ],
+  "blocks": [
+    {
+      "type": "style_card",
+      "name": "Style card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Everyday Elegance" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "style_card", "settings": { "title": "Everyday Elegance" } },
+      { "type": "style_card", "settings": { "title": "Office Edit" } },
+      { "type": "style_card", "settings": { "title": "Festive Edit" } },
+      { "type": "style_card", "settings": { "title": "New Arrivals" } }
+    ]
+  },
+  "presets": [
+    { "name": "Shop by style" }
+  ]
+}
+{% endschema %}

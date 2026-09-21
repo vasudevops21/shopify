@@ -1,0 +1,66 @@
+<footer class="site-footer">
+  <div class="site-footer__inner page-width">
+    <div class="site-footer__brand">
+      <span class="site-footer__logo">{{ shop.name }}</span>
+      {%- if section.settings.description != blank -%}
+        <p class="site-footer__description">{{ section.settings.description }}</p>
+      {%- endif -%}
+      <div class="site-footer__social">
+        {%- if section.settings.instagram_url != blank -%}
+          <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+        {%- endif -%}
+        {%- if section.settings.facebook_url != blank -%}
+          <a href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+        {%- endif -%}
+        {%- if section.settings.youtube_url != blank -%}
+          <a href="{{ section.settings.youtube_url }}" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- for block in section.blocks -%}
+      <div class="site-footer__column" {{ block.shopify_attributes }}>
+        <h3 class="site-footer__column-title">{{ block.settings.title }}</h3>
+        <ul class="site-footer__link-list">
+          {%- for link in block.settings.menu.links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <div class="site-footer__bottom page-width">
+    <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ 'sections.footer.rights_reserved' | t }}</p>
+    <div class="site-footer__payment-icons">{{ shop.enabled_payment_types | join: ' ' }}</div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "textarea", "id": "description", "label": "Brand description", "default": "Premium 3-piece Kurti Sets at beautiful prices." },
+    { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
+    { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
+    { "type": "url", "id": "youtube_url", "label": "YouTube URL" }
+  ],
+  "blocks": [
+    {
+      "type": "link_column",
+      "name": "Link column",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Column title", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "link_column", "settings": { "title": "Shop" } },
+      { "type": "link_column", "settings": { "title": "Customer Care" } },
+      { "type": "link_column", "settings": { "title": "Policies" } }
+    ]
+  }
+}
+{% endschema %}

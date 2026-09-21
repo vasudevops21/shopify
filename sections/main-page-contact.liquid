@@ -1,0 +1,37 @@
+<section class="contact-page page-width">
+  <h1 class="contact-page__title">{{ page.title }}</h1>
+  <div class="contact-page__body rte">{{ page.content }}</div>
+
+  {%- form 'contact', id: 'ContactForm' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="contact-page__success">{{ 'contact.form.post_success' | t }}</p>
+    {%- endif -%}
+    {%- if form.errors -%}
+      <p class="contact-page__error">{{ form.errors | default_errors }}</p>
+    {%- endif -%}
+    <div class="contact-page__field">
+      <label for="ContactFormName">{{ 'contact.form.name' | t }}</label>
+      <input type="text" id="ContactFormName" name="contact[name]" value="{% if customer %}{{ customer.name }}{% endif %}">
+    </div>
+    <div class="contact-page__field">
+      <label for="ContactFormEmail">{{ 'contact.form.email' | t }}*</label>
+      <input type="email" id="ContactFormEmail" name="contact[email]" required value="{% if customer %}{{ customer.email }}{% endif %}">
+    </div>
+    <div class="contact-page__field">
+      <label for="ContactFormPhone">{{ 'contact.form.phone' | t }}</label>
+      <input type="tel" id="ContactFormPhone" name="contact[phone]">
+    </div>
+    <div class="contact-page__field">
+      <label for="ContactFormMessage">{{ 'contact.form.message' | t }}*</label>
+      <textarea id="ContactFormMessage" name="contact[body]" rows="6" required></textarea>
+    </div>
+    <button type="submit" class="button button--primary">{{ 'contact.form.send' | t }}</button>
+  {%- endform -%}
+</section>
+
+{% schema %}
+{
+  "name": "Contact page",
+  "settings": []
+}
+{% endschema %}

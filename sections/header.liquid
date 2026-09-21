@@ -1,0 +1,97 @@
+<header class="site-header" data-sticky-header>
+  <div class="site-header__inner page-width">
+    <button type="button" class="site-header__menu-toggle" data-open-mobile-nav aria-label="{{ 'sections.header.menu' | t }}">
+      <span></span><span></span><span></span>
+    </button>
+
+    <a href="{{ routes.root_url }}" class="site-header__logo">
+      {%- if section.settings.logo != blank -%}
+        <img
+          src="{{ section.settings.logo | image_url: width: 320 }}"
+          alt="{{ shop.name }}"
+          width="{{ section.settings.logo_width }}"
+          height="{{ section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio }}"
+        >
+      {%- else -%}
+        <span class="site-header__logo-text">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    <nav class="site-header__nav" aria-label="{{ 'sections.header.main_nav' | t }}">
+      <ul class="site-header__nav-list">
+        {%- for link in section.settings.main_menu.links -%}
+          <li class="site-header__nav-item">
+            <a href="{{ link.url }}" class="site-header__nav-link {% if link.active %}is-active{% endif %}">
+              {{ link.title }}
+            </a>
+            {%- if link.links != blank -%}
+              <ul class="site-header__submenu">
+                {%- for child in link.links -%}
+                  <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="site-header__icons">
+      <button type="button" class="site-header__icon-btn" data-open-search aria-label="{{ 'general.search.title' | t }}">
+        {% render 'icon-search' %}
+      </button>
+      <a href="{% if shop.customer_accounts_enabled %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="site-header__icon-btn" aria-label="{{ 'customer.account.title' | t }}">
+        {% render 'icon-account' %}
+      </a>
+      <a href="{{ routes.root_url }}pages/wishlist" class="site-header__icon-btn" data-wishlist-count aria-label="{{ 'general.wishlist.title' | t }}">
+        {% render 'icon-wishlist' %}
+        <span class="site-header__badge" data-wishlist-badge hidden>0</span>
+      </a>
+      <button type="button" class="site-header__icon-btn" data-open-cart aria-label="{{ 'templates.cart.title' | t }}">
+        {% render 'icon-cart' %}
+        <span class="site-header__badge" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-nav" data-mobile-nav hidden>
+    <div class="mobile-nav__header">
+      <span class="site-header__logo-text">{{ shop.name }}</span>
+      <button type="button" data-close-mobile-nav aria-label="{{ 'accessibility.close' | t }}">{% render 'icon-close' %}</button>
+    </div>
+    <ul class="mobile-nav__list">
+      {%- for link in section.settings.main_menu.links -%}
+        <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 80,
+      "max": 260,
+      "step": 10,
+      "default": 160,
+      "unit": "px"
+    },
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}
